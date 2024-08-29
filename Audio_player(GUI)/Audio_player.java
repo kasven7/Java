@@ -1,5 +1,13 @@
 class Audio_player {
     public static void main(String[] args) {
-        ApFrame apFrame = new ApFrame();
+        try {
+
+            ApFrame apFrame = new ApFrame();
+
+        }
+        catch(Exception e) {
+            System.out.println(e);
+            e.printStackTrace();
+        }
     }
 }
