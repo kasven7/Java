@@ -24,7 +24,7 @@ public class ApFrame extends JFrame {
         this.add(control_panel);
         this.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
-                control_panel.setBounds(300, 300, 250, 37);
+                control_panel.setBounds(300, 300, 400, 37);
             }
         });
 
