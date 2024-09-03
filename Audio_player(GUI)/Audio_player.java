@@ -1,13 +1,11 @@
+import javax.sound.sampled.*;
+import java.io.IOException;
+
+
 class Audio_player {
-    public static void main(String[] args) {
-        try {
+    public static void main(String[] args) throws LineUnavailableException, UnsupportedAudioFileException, IOException {
 
-            ApFrame apFrame = new ApFrame();
-
-        }
-        catch(Exception e) {
-            System.out.println(e);
-            e.printStackTrace();
-        }
+        // run the program
+        ApFrame apFrame = new ApFrame();
     }
 }
