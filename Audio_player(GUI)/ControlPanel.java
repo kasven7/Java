@@ -1,10 +1,15 @@
 import javax.swing.*;
 import java.awt.*;
+ on-going
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
+
+import java.io.File;
+import java.io.IOException;
+ main
 import javax.sound.sampled.*;
 
 
@@ -13,6 +18,7 @@ public class ControlPanel extends JPanel {
     private int current_index = 0;
     private ArrayList<File> audio_files;
 
+on-going
 
     // locate the current file that you're on in the folder and play it
     private void loadAndPlayCurrentFile() throws IOException, LineUnavailableException, UnsupportedAudioFileException {
@@ -98,10 +104,31 @@ public class ControlPanel extends JPanel {
         KButton previous_track_button = new KButton();
         previous_track_button.setText("<<<");
 
+=======
+    ControlPanel() throws LineUnavailableException, UnsupportedAudioFileException, IOException {
+
+        // File clip and audio input stream
+        File file = new File("antent - hope to see you again (slowed).wav");
+        AudioInputStream ais = AudioSystem.getAudioInputStream(file);
+
+        Clip clip = AudioSystem.getClip();
+        clip.open(ais);
+
+        // Control panel buttons
+        KButton play = new KButton();
+        play.setText("PLAY");
+
+        KButton stop = new KButton();
+        stop.setText("STOP");
+
+        KButton reset = new KButton();
+        reset.setText("RESET");
+main
 
         // Panel properties
         this.setBackground(Color.black);
         this.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+on-going
         this.setBounds(300, 300, 400, 37);
 
         // button functionality
@@ -124,6 +151,18 @@ public class ControlPanel extends JPanel {
         this.add(reset_button);
         this.add(next_track_button);
         this.add(previous_track_button);
+=======
+        this.setBounds(300, 300, 250, 37);
+
+        // button functionality
+        play.addActionListener(_ -> clip.start());
+        stop.addActionListener(_ -> clip.stop());
+        reset.addActionListener(_ -> clip.setFramePosition(0));
+
+        this.add(play);
+        this.add(stop);
+        this.add(reset);
+main
 
     }
 }
