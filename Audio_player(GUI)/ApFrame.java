@@ -12,6 +12,7 @@ public class ApFrame extends JFrame {
     ApFrame() throws LineUnavailableException, UnsupportedAudioFileException, IOException {
 
         ControlPanel control_panel = new ControlPanel();
+        FolderChooserPanel chooser_panel = new FolderChooserPanel();
 
         // frame properties
         this.setTitle("Audio Player");
@@ -20,11 +21,13 @@ public class ApFrame extends JFrame {
         this.getContentPane().setBackground(Color.BLACK);
         this.setLayout(null);
 
-        // concerning control panel
+        // concerning panels
         this.add(control_panel);
+        this.add(chooser_panel);
         this.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
-                control_panel.setBounds(300, 300, 400, 37);
+                control_panel.setBounds(300, 300, 300, 37);
+                chooser_panel.setBounds(395, 340, 110, 37);
             }
         });
 

@@ -84,13 +84,13 @@ public class ControlPanel extends JPanel {
 
         // Control panel buttons
         KButton play_button = new KButton();
-        play_button.setText("PLAY");
+        play_button.setText("➤");
 
         KButton stop_button = new KButton();
-        stop_button.setText("STOP");
+        stop_button.setText("❚❚");
 
         KButton reset_button = new KButton();
-        reset_button.setText("RESET");
+        reset_button.setText("■");
 
         KButton next_track_button = new KButton();
         next_track_button.setText(">>>");
@@ -102,7 +102,7 @@ public class ControlPanel extends JPanel {
         // Panel properties
         this.setBackground(Color.black);
         this.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-        this.setBounds(300, 300, 400, 37);
+        this.setBounds(300, 300, 300, 37);
 
         // button functionality
         play_button.addActionListener(_ -> {
@@ -118,12 +118,12 @@ public class ControlPanel extends JPanel {
         next_track_button.addActionListener(this::nextTrack);
         previous_track_button.addActionListener(this::previousTrack);
 
-
+        this.add(previous_track_button);
         this.add(play_button);
         this.add(stop_button);
         this.add(reset_button);
         this.add(next_track_button);
-        this.add(previous_track_button);
+
 
     }
 }
