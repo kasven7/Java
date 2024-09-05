@@ -1,15 +1,12 @@
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.io.IOException;
 
 
 public class ApFrame extends JFrame {
 
-    ApFrame() throws LineUnavailableException, UnsupportedAudioFileException, IOException {
+    ApFrame() {
 
         ControlPanel control_panel = new ControlPanel();
 
@@ -20,7 +17,7 @@ public class ApFrame extends JFrame {
         this.getContentPane().setBackground(Color.BLACK);
         this.setLayout(null);
 
-        // concerning control panel
+        // concerning panels
         this.add(control_panel);
         this.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {

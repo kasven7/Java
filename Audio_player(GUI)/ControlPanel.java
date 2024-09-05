@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 import javax.sound.sampled.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 
 public class ControlPanel extends JPanel {
@@ -15,7 +16,7 @@ public class ControlPanel extends JPanel {
 
 
     // locate the current file that you're on in the folder and play it
-    private void loadAndPlayCurrentFile() throws IOException, LineUnavailableException, UnsupportedAudioFileException {
+    protected void loadAndPlayCurrentFile() throws IOException, LineUnavailableException, UnsupportedAudioFileException {
         if(current_index >= audio_files.size()) {
             current_index = 0;
         }
@@ -28,7 +29,7 @@ public class ControlPanel extends JPanel {
     }
 
     // simulate a folder
-    private void loadAudioFiles(String path) {
+    protected void loadAudioFiles(String path) {
         File directory = new File(path);
         audio_files = new ArrayList<>();
 
@@ -84,19 +85,21 @@ public class ControlPanel extends JPanel {
 
         // Control panel buttons
         KButton play_button = new KButton();
-        play_button.setText("PLAY");
+        play_button.setText("➤");
 
         KButton stop_button = new KButton();
-        stop_button.setText("STOP");
+        stop_button.setText("❚❚");
 
         KButton reset_button = new KButton();
-        reset_button.setText("RESET");
+        reset_button.setText("■");
 
         KButton next_track_button = new KButton();
         next_track_button.setText(">>>");
 
         KButton previous_track_button = new KButton();
         previous_track_button.setText("<<<");
+
+        KButton select_folder_button = getkButton();
 
 
         // Panel properties
@@ -118,12 +121,34 @@ public class ControlPanel extends JPanel {
         next_track_button.addActionListener(this::nextTrack);
         previous_track_button.addActionListener(this::previousTrack);
 
-
+        this.add(previous_track_button);
         this.add(play_button);
         this.add(stop_button);
         this.add(reset_button);
         this.add(next_track_button);
-        this.add(previous_track_button);
+        this.add(select_folder_button);
 
+    }
+
+    private KButton getkButton() {
+        KButton select_folder_button = new KButton();
+        select_folder_button.setText("Select a folder");
+        select_folder_button.addActionListener(e -> {
+            JFileChooser chooser = new JFileChooser();
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("WAV Files", "wav");
+
+            chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            chooser.setFileFilter(filter);
+
+            int response = chooser.showOpenDialog(null);
+
+            if(response == JFileChooser.APPROVE_OPTION) {
+                File selected_directory = chooser.getSelectedFile();
+
+                loadAudioFiles(selected_directory.getAbsolutePath());
+
+            }
+        });
+        return select_folder_button;
     }
 }
