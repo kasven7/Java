@@ -122,6 +122,7 @@ public class ControlPanel extends JPanel {
         previous_track_button = new KButton();
         previous_track_button.setText("<<<");
 
+
         KButton select_folder_button = getKButton();
 
 
@@ -129,6 +130,7 @@ public class ControlPanel extends JPanel {
         this.setBackground(Color.black);
         this.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         this.setBounds(300, 300, 400, 37);
+
 
         // button functionality
         play_button.addActionListener(_ -> {
@@ -165,7 +167,7 @@ public class ControlPanel extends JPanel {
         this.add(stop_button);
         this.add(next_track_button);
         this.add(select_folder_button);
-
+      
         updateButtonStates();
     }
 
