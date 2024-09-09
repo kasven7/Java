@@ -1,15 +1,12 @@
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.io.IOException;
 
 
 public class ApFrame extends JFrame {
 
-    ApFrame() throws LineUnavailableException, UnsupportedAudioFileException, IOException {
+    ApFrame() {
 
         ControlPanel control_panel = new ControlPanel();
         FolderChooserPanel chooser_panel = new FolderChooserPanel();
