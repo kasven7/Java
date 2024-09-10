@@ -28,7 +28,7 @@ public class ControlPanel extends JPanel {
             current_index = 0;
         }
 
-        else if(is_folder_loaded_and_played) {
+        if(is_folder_loaded_and_played) {
             clip.close();
             is_folder_loaded_and_played = false;
         }
@@ -41,6 +41,20 @@ public class ControlPanel extends JPanel {
             clip.open(ais);
             clip.start();
         }
+    }
+
+
+    private void loadCurrentFile() throws IOException, LineUnavailableException, UnsupportedAudioFileException {
+
+        if(current_index >= audio_files.size()) {
+            current_index = 0;
+        }
+
+        File current_file = audio_files.get(current_index);
+        AudioInputStream ais = AudioSystem.getAudioInputStream(current_file);
+        clip = AudioSystem.getClip();
+        clip.open(ais);
+
     }
 
     // simulate a folder
@@ -75,7 +89,7 @@ public class ControlPanel extends JPanel {
                 current_index = audio_files.size() - 1;
             }
 
-            loadAndPlayCurrentFile();
+            loadCurrentFile();
 
         } catch(LineUnavailableException | UnsupportedAudioFileException | IOException e){
             e.printStackTrace();
@@ -88,7 +102,7 @@ public class ControlPanel extends JPanel {
             try{
                 clip.close();
                 current_index++;
-                loadAndPlayCurrentFile();
+                loadCurrentFile();
 
             } catch(LineUnavailableException | UnsupportedAudioFileException | IOException e){
                 e.printStackTrace();
