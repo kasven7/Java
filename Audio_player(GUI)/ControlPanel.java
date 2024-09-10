@@ -50,6 +50,7 @@ public class ControlPanel extends JPanel {
             current_index = 0;
         }
 
+        is_folder_loaded_and_played = false;
         File current_file = audio_files.get(current_index);
         AudioInputStream ais = AudioSystem.getAudioInputStream(current_file);
         clip = AudioSystem.getClip();
