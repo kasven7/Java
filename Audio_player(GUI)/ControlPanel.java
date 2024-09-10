@@ -15,6 +15,7 @@ public class ControlPanel extends JPanel {
     private boolean is_folder_loaded_and_played = false;
     private boolean is_folder_selected = false;
     private ArrayList<File> audio_files;
+    private final KButton play_reset_button;
     private final KButton stop_button;
     private final KButton next_track_button;
     private final KButton previous_track_button;
@@ -27,17 +28,19 @@ public class ControlPanel extends JPanel {
             current_index = 0;
         }
 
-        if(is_folder_loaded_and_played) {
+        else if(is_folder_loaded_and_played) {
             clip.close();
             is_folder_loaded_and_played = false;
         }
 
-        is_folder_loaded_and_played = true;
-        File current_file = audio_files.get(current_index);
-        AudioInputStream ais = AudioSystem.getAudioInputStream(current_file);
-        clip = AudioSystem.getClip();
-        clip.open(ais);
-        clip.start();
+        else{
+            is_folder_loaded_and_played = true;
+            File current_file = audio_files.get(current_index);
+            AudioInputStream ais = AudioSystem.getAudioInputStream(current_file);
+            clip = AudioSystem.getClip();
+            clip.open(ais);
+            clip.start();
+        }
     }
 
     // simulate a folder
@@ -55,41 +58,33 @@ public class ControlPanel extends JPanel {
             JOptionPane.showMessageDialog(null, "No \".wav\" files found in the specified directory!");
         }
 
-        if(!audio_files.isEmpty()) {
+        else {
             is_folder_selected = true;
+            play_reset_button.setEnabled(true);
         }
 
     }
 
     // play a previous track in the folder
     private void previousTrack(ActionEvent actionEvent) {
+        try{
+            clip.close();
+            current_index--;
 
-        if(is_folder_loaded_and_played) {
-            try{
-
-                clip.close();
-                current_index--;
-
-                if(current_index < 0) {
-                    current_index = audio_files.size() - 1;
-                }
-
-                loadAndPlayCurrentFile();
-
-            } catch(LineUnavailableException | UnsupportedAudioFileException | IOException e){
-                e.printStackTrace();
+            if(current_index < 0) {
+                current_index = audio_files.size() - 1;
             }
-        }
 
-        else{
-            JOptionPane.showMessageDialog(null, "Please select a folder in which you hold your \".wav\" audio files first!");
+            loadAndPlayCurrentFile();
+
+        } catch(LineUnavailableException | UnsupportedAudioFileException | IOException e){
+            e.printStackTrace();
         }
     }
 
 
     // play the next track in the folder
     private void nextTrack(ActionEvent actionEvent) {
-        if(is_folder_loaded_and_played) {
             try{
                 clip.close();
                 current_index++;
@@ -98,11 +93,6 @@ public class ControlPanel extends JPanel {
             } catch(LineUnavailableException | UnsupportedAudioFileException | IOException e){
                 e.printStackTrace();
             }
-        }
-
-        else{
-            JOptionPane.showMessageDialog(null, "Please select a folder in which you hold your \".wav\" audio files first!");
-        }
     }
 
 
@@ -110,8 +100,8 @@ public class ControlPanel extends JPanel {
     ControlPanel() {
 
         // Control panel buttons
-        KButton play_button = new KButton();
-        play_button.setText("➤⏹");
+        play_reset_button = new KButton();
+        play_reset_button.setText("➤⏹");
 
         stop_button = new KButton();
         stop_button.setText("❚❚");
@@ -122,8 +112,7 @@ public class ControlPanel extends JPanel {
         previous_track_button = new KButton();
         previous_track_button.setText("<<<");
 
-
-        KButton select_folder_button = getKButton();
+        KButton select_folder_button = getFolderButton();
 
 
         // Panel properties
@@ -131,49 +120,33 @@ public class ControlPanel extends JPanel {
         this.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         this.setBounds(300, 300, 400, 37);
 
-
         // button functionality
-        play_button.addActionListener(_ -> {
-            if(is_folder_selected) {
-                try{
-                    loadAndPlayCurrentFile();
-                    updateButtonStates();
+        play_reset_button.addActionListener(_ -> {
+            try{
+                loadAndPlayCurrentFile();
+                updateButtonStates();
 
-                }catch(LineUnavailableException | UnsupportedAudioFileException | IOException e){
-                    e.printStackTrace();
-                }
+            }catch(LineUnavailableException | UnsupportedAudioFileException | IOException e){
+                e.printStackTrace();
             }
-
-            else{
-                JOptionPane.showMessageDialog(null, "Please select a folder in which you hold your \".wav\" audio files first!");
-            }
-
         });
 
-        stop_button.addActionListener(_ -> {
-            if(is_folder_selected) {
-                clip.stop();
-            }
-
-            else{
-                JOptionPane.showMessageDialog(null, "Please select a folder in which you hold your \".wav\" audio files first!");
-            }
-            });
+        stop_button.addActionListener(_ -> clip.stop());
         next_track_button.addActionListener(this::nextTrack);
         previous_track_button.addActionListener(this::previousTrack);
 
         this.add(previous_track_button);
-        this.add(play_button);
+        this.add(play_reset_button);
         this.add(stop_button);
         this.add(next_track_button);
         this.add(select_folder_button);
-      
+
+        play_reset_button.setEnabled(false);
         updateButtonStates();
     }
 
     // updates the states of buttons after the user has selected a folder
     private void updateButtonStates(){
-
         stop_button.setEnabled(is_folder_selected);
         next_track_button.setEnabled(is_folder_selected);
         previous_track_button.setEnabled(is_folder_selected);
@@ -181,7 +154,7 @@ public class ControlPanel extends JPanel {
     }
 
 
-    private KButton getKButton() {
+    private KButton getFolderButton() {
         KButton select_folder_button = new KButton();
         select_folder_button.setText("Select a folder");
         select_folder_button.addActionListener(_ -> {
