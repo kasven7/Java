@@ -13,7 +13,8 @@ public class ControlPanel extends JPanel {
     // class variables
     private Clip clip;
     private int current_index = 0;
-    private boolean was_track_manually_changed = false;
+    private static boolean is_looping = false;
+
     private boolean can_be_used = false;    // determines whether the buttons can be activated or not
     private boolean was_file_loaded_and_played = false;     // checks whether loadAndPlayCurrentFile function has been called
     private ArrayList<File> audio_files;    // a folder
@@ -24,6 +25,7 @@ public class ControlPanel extends JPanel {
     private final KButton select_folder_button;
     private final KButton forward_track_by_five_seconds_button;
     private final KButton rewind_track_by_five_seconds_button;
+    private final KButton loop_track_button;
 
 
     // locate the current file that you're on in the folder and play it
@@ -37,21 +39,15 @@ public class ControlPanel extends JPanel {
         AudioInputStream ais = AudioSystem.getAudioInputStream(current_file);
         clip = AudioSystem.getClip();
         clip.open(ais);
+        clip.start();
+
 
         clip.addLineListener(event -> {
-            if (event.getType() == LineEvent.Type.STOP) {
-                // Ensure the clip is closed properly before starting the next one
-                clip.close();
-
-                if(!was_track_manually_changed) {
-                    nextTrack();  // Play the next track when the current one ends
-                }
-
-                was_track_manually_changed = false;
+            if (event.getType() == LineEvent.Type.STOP && is_looping) {
+                clip.setFramePosition(0);  // Restart the track from the beginning
+                clip.start();  // Start the clip again
             }
         });
-
-        clip.start();
 
     }
 
@@ -86,7 +82,6 @@ public class ControlPanel extends JPanel {
 
     // play a previous track in the folder
     private void previousTrack(ActionEvent actionEvent) {
-        was_track_manually_changed = true;
 
         try{
             clip.close();
@@ -98,75 +93,72 @@ public class ControlPanel extends JPanel {
 
             loadAndPlayCurrentFile();
 
+            if (is_looping) {
+                clip.loop(Clip.LOOP_CONTINUOUSLY);
+            }
+
         } catch(LineUnavailableException | UnsupportedAudioFileException | IOException e){
             e.printStackTrace();
         }
     }
-
-
-
 
 
     // play the next track in the folder
     private void nextTrack(ActionEvent actionEvent) {
-        was_track_manually_changed = true;
 
         try{
             clip.close();
             current_index++;
             loadAndPlayCurrentFile();
+
+            if (is_looping) {
+                clip.loop(Clip.LOOP_CONTINUOUSLY);
+            }
 
         } catch(LineUnavailableException | UnsupportedAudioFileException | IOException e){
             e.printStackTrace();
         }
     }
-
-    private void nextTrack(){
-        try{
-            clip.close();
-            current_index++;
-            loadAndPlayCurrentFile();
-
-        }catch(LineUnavailableException | UnsupportedAudioFileException | IOException e){
-            e.printStackTrace();
-        }
-    }
-
 
     // constructor of control panel
     ControlPanel() {
 
         // Control panel buttons
         forward_track_by_five_seconds_button = new KButton();
-        forward_track_by_five_seconds_button.setText("↻");
+        forward_track_by_five_seconds_button.setText("↺");
 
         play_stop_button = new KButton();
-        play_stop_button.setText("▶▐▐");
+        play_stop_button.setText("⏯");
 
         reset_button = new KButton();
         reset_button.setText("⏹");
 
         next_track_button = new KButton();
-        next_track_button.setText("▷");
+        next_track_button.setText("⏭");
 
         previous_track_button = new KButton();
-        previous_track_button.setText("◁");
+        previous_track_button.setText("⏮");
 
         select_folder_button = getFolderButton();
 
         rewind_track_by_five_seconds_button = new KButton();
-        rewind_track_by_five_seconds_button.setText("↺");
+        rewind_track_by_five_seconds_button.setText("↻");
+
+        loop_track_button = new KButton();
+        loop_track_button.setText("\uD83D\uDD01");
+        loop_track_button.setForeground(Color.RED);
 
 
         // Panel properties
         this.setBackground(Color.black);
         this.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-        this.setBounds(0, 0, 500, 37);
+        this.setBounds(0, 0, 400, 37);
 
 
         // button functionality
         forward_track_by_five_seconds_button.addActionListener(this::forwardTrackByFiveSeconds);
         play_stop_button.addActionListener(_ -> {
+
             if(was_file_loaded_and_played) {
                 clip.stop();
                 was_file_loaded_and_played = false;
@@ -177,10 +169,27 @@ public class ControlPanel extends JPanel {
                 was_file_loaded_and_played = true;
             }
         });
-        reset_button.addActionListener(_ -> clip.setFramePosition(0));
+        reset_button.addActionListener(_ -> {
+            if(!(clip.isRunning())) {
+                clip.start();
+            }
+
+            clip.setFramePosition(0);
+        });
         next_track_button.addActionListener(this::nextTrack);
         previous_track_button.addActionListener(this::previousTrack);
         rewind_track_by_five_seconds_button.addActionListener(this::rewindTrackByFiveSeconds);
+        loop_track_button.addActionListener(_ -> {
+            if(is_looping){
+                loop_track_button.setForeground(Color.RED); // is not looping a track
+                is_looping = false;
+            }
+
+            else{
+                loop_track_button.setForeground(Color.GREEN); // is looping a track
+                is_looping = true;
+            }
+        });
 
 
         // contents of the panel
@@ -191,6 +200,7 @@ public class ControlPanel extends JPanel {
         this.add(next_track_button);
         this.add(forward_track_by_five_seconds_button);
         this.add(select_folder_button);
+        this.add(loop_track_button);
 
         updateButtonStates();
         select_folder_button.setEnabled(true);
@@ -206,12 +216,15 @@ public class ControlPanel extends JPanel {
         previous_track_button.setEnabled(can_be_used);
         rewind_track_by_five_seconds_button.setEnabled(can_be_used);
         select_folder_button.setEnabled(false);
+        loop_track_button.setEnabled(can_be_used);
+
     }
 
 
     // forward button logic
     private void forwardTrackByFiveSeconds(ActionEvent actionEvent) {
         if(clip.isRunning() && clip != null) {
+
             long current_frame_position = clip.getFramePosition();
             AudioFormat format = clip.getFormat();
 
@@ -221,7 +234,6 @@ public class ControlPanel extends JPanel {
             if(new_position <= clip.getFrameLength()) {
                 clip.setFramePosition((int) new_position);
             }
-
         }
     }
 
@@ -229,13 +241,14 @@ public class ControlPanel extends JPanel {
     // rewind button logic
     private void rewindTrackByFiveSeconds(ActionEvent actionEvent) {
         if(clip.isRunning() && clip != null) {
+
             long current_frame_position = clip.getFramePosition();
             AudioFormat format = clip.getFormat();
 
             long frames_to_move = (long) (5 * format.getFrameRate());
             long new_position = current_frame_position - frames_to_move;
 
-            if (new_position <= clip.getFrameLength()) {
+            if (new_position >= 0 && new_position <= clip.getFrameLength()) {
                 clip.setFramePosition((int) new_position);
             }
         }

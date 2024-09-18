@@ -14,6 +14,7 @@ public class KButton extends JButton {
         this.setBackground(Color.BLACK);
         this.setBorder(empty_border);
         this.setBorderPainted(false);
+        this.setFont(new Font("Serif", Font.PLAIN, 20));
 
     }
 }

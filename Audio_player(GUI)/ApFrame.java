@@ -20,7 +20,7 @@ public class ApFrame extends JFrame {
         this.setResizable(false);
         this.setIconImage(icon.getImage());
 
-        // concerning panels
+        // concerning control control panel
         this.add(control_panel);
         this.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
