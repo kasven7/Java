@@ -14,7 +14,6 @@ public class ControlPanel extends JPanel {
     private Clip clip;
     private int current_index = 0;
     private static boolean is_looping = false;
-
     private boolean can_be_used = false;    // determines whether the buttons can be activated or not
     private boolean was_file_loaded_and_played = false;     // checks whether loadAndPlayCurrentFile function has been called
     private ArrayList<File> audio_files;    // a folder
@@ -155,22 +154,15 @@ public class ControlPanel extends JPanel {
         AudioInputStream ais = AudioSystem.getAudioInputStream(current_file);
         clip = AudioSystem.getClip();
         clip.open(ais);
-        clip.start();
-
 
         clip.addLineListener(event -> {
-            if (event.getType() == LineEvent.Type.STOP && is_looping) {
+            if (event.getType() == LineEvent.Type.STOP && is_looping && was_file_loaded_and_played) {
                 clip.setFramePosition(0);  // Restart the track from the beginning
                 clip.start();  // Start the clip again
             }
         });
 
-        clip.addLineListener(event -> {
-            if (event.getType() == LineEvent.Type.STOP && !is_looping) {
-                nextTrack();
-            }
-        });
-
+        clip.start();
     }
 
 
@@ -215,22 +207,6 @@ public class ControlPanel extends JPanel {
 
             loadAndPlayCurrentFile();
 
-            if (is_looping) {
-                clip.loop(Clip.LOOP_CONTINUOUSLY);
-            }
-
-        } catch(LineUnavailableException | UnsupportedAudioFileException | IOException e){
-            e.printStackTrace();
-        }
-    }
-
-
-    private void nextTrack() {
-
-        try{
-            clip.close();
-            current_index++;
-            loadAndPlayCurrentFile();
 
             if (is_looping) {
                 clip.loop(Clip.LOOP_CONTINUOUSLY);
@@ -240,6 +216,7 @@ public class ControlPanel extends JPanel {
             e.printStackTrace();
         }
     }
+
 
     // play the next track in the folder
     private void nextTrack(ActionEvent actionEvent) {
@@ -249,6 +226,7 @@ public class ControlPanel extends JPanel {
             current_index++;
             loadAndPlayCurrentFile();
 
+
             if (is_looping) {
                 clip.loop(Clip.LOOP_CONTINUOUSLY);
             }
@@ -258,6 +236,19 @@ public class ControlPanel extends JPanel {
         }
     }
 
+
+    // the same method but used in an actionListener
+    private void nextTrack() {
+
+        try{
+            clip.close();
+            current_index++;
+            loadAndPlayCurrentFile();
+
+        } catch(LineUnavailableException | UnsupportedAudioFileException | IOException e){
+            e.printStackTrace();
+        }
+    }
 
     // rewind button logic
     private void rewindTrackByFiveSeconds(ActionEvent actionEvent) {
