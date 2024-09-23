@@ -156,18 +156,6 @@ public class ControlPanel extends JPanel {
         clip = AudioSystem.getClip();
         clip.open(ais);
 
-        /*
-        clip.addLineListener(event -> {
-            if (event.getType() == LineEvent.Type.STOP && is_looping && was_file_loaded_and_played) {
-                clip.setFramePosition(0);  // Restart the track from the beginning
-                clip.start();  // Start the clip again
-            }
-
-            else if(event.getType() == LineEvent.Type.STOP && !is_looping && was_file_loaded_and_played && play_next) {
-                nextTrack();
-            }
-        });
-        */
 
         // When the clip reaches the end naturally, set trackFinished to true
         clip.addLineListener(event -> {
@@ -176,11 +164,13 @@ public class ControlPanel extends JPanel {
             }
         });
 
+
+        //
         clip.addLineListener(event -> {
             if (event.getType() == LineEvent.Type.STOP) {
                 // Check if the track finished naturally
                 if (track_finished) {
-                    if (is_looping) {
+                    if (is_looping && was_file_loaded_and_played) {
                         clip.setFramePosition(0); // Restart the track from the beginning
                         clip.start(); // Start the clip again
                     }
@@ -191,14 +181,12 @@ public class ControlPanel extends JPanel {
                 }
 
                 else {
-                    // Reset the flag for manual stop (e.g., pause or stop button)
-                    track_finished = false;
+                    track_finished = false;     // Reset the flag for manual stop (e.g., pause or stop button)
                 }
             }
 
             else if (event.getType() == LineEvent.Type.START) {
-                // Reset the flag when a new track starts playing
-                track_finished = false;
+                track_finished = false;     // Reset the flag when a new track starts playing
             }
         });
 
