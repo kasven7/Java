@@ -16,6 +16,7 @@ public class ControlPanel extends JPanel {
     private static boolean is_looping = false;
     private boolean can_be_used = false;    // determines whether the buttons can be activated or not
     private boolean was_file_loaded_and_played = false;     // checks whether loadAndPlayCurrentFile function has been called
+    private boolean track_finished = false;
     private ArrayList<File> audio_files;    // a folder
     private final KButton play_stop_button;
     private final KButton reset_button;
@@ -155,10 +156,49 @@ public class ControlPanel extends JPanel {
         clip = AudioSystem.getClip();
         clip.open(ais);
 
+        /*
         clip.addLineListener(event -> {
             if (event.getType() == LineEvent.Type.STOP && is_looping && was_file_loaded_and_played) {
                 clip.setFramePosition(0);  // Restart the track from the beginning
                 clip.start();  // Start the clip again
+            }
+
+            else if(event.getType() == LineEvent.Type.STOP && !is_looping && was_file_loaded_and_played && play_next) {
+                nextTrack();
+            }
+        });
+        */
+
+        // When the clip reaches the end naturally, set trackFinished to true
+        clip.addLineListener(event -> {
+            if (event.getType() == LineEvent.Type.STOP && clip.getFramePosition() >= clip.getFrameLength()) {
+                track_finished = true; // Track finished naturally
+            }
+        });
+
+        clip.addLineListener(event -> {
+            if (event.getType() == LineEvent.Type.STOP) {
+                // Check if the track finished naturally
+                if (track_finished) {
+                    if (is_looping) {
+                        clip.setFramePosition(0); // Restart the track from the beginning
+                        clip.start(); // Start the clip again
+                    }
+
+                    else {
+                        nextTrack(); // Move to the next track
+                    }
+                }
+
+                else {
+                    // Reset the flag for manual stop (e.g., pause or stop button)
+                    track_finished = false;
+                }
+            }
+
+            else if (event.getType() == LineEvent.Type.START) {
+                // Reset the flag when a new track starts playing
+                track_finished = false;
             }
         });
 
@@ -241,6 +281,7 @@ public class ControlPanel extends JPanel {
     private void nextTrack() {
 
         try{
+
             clip.close();
             current_index++;
             loadAndPlayCurrentFile();
