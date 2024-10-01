@@ -11,10 +11,11 @@ public class ApFrame extends JFrame {
         ControlPanel control_panel = new ControlPanel();
         ImageIcon icon = new ImageIcon("Green_headphones.jpg");
 
+
         // frame properties
         this.setTitle("Audio Player");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(400, 75);
+        this.setSize(416, 74);
         this.getContentPane().setBackground(Color.BLACK);
         this.setLayout(null);
         this.setResizable(false);
@@ -25,6 +26,7 @@ public class ApFrame extends JFrame {
         this.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
                 control_panel.setBounds(0, 0, 400, 37);
+
             }
         });
 

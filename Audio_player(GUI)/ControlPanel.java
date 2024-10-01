@@ -9,7 +9,9 @@ import javax.sound.sampled.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 
+@SuppressWarnings("DataFlowIssue")
 public class ControlPanel extends JPanel {
+
     // class variables
     private Clip clip;
     private int current_index = 0;
@@ -26,8 +28,6 @@ public class ControlPanel extends JPanel {
     private final KButton forward_track_by_five_seconds_button;
     private final KButton rewind_track_by_five_seconds_button;
     private final KButton loop_track_button;
-
-
 
 
     // constructor of control panel
