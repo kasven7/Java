@@ -69,7 +69,7 @@ public class ControlPanel extends JPanel {
         // Panel properties
         this.setBackground(Color.black);
         this.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-        this.setBounds(0, 0, 220, 90);
+        this.setBounds(0, 0, 206, 90);
 
 
         // button functionality
