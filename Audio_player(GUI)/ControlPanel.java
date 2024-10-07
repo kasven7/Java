@@ -9,16 +9,13 @@ import javax.sound.sampled.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 
-@SuppressWarnings("DataFlowIssue")
 public class ControlPanel extends JPanel {
-
     // class variables
     private Clip clip;
     private int current_index = 0;
     private static boolean is_looping = false;
     private boolean can_be_used = false;    // determines whether the buttons can be activated or not
     private boolean was_file_loaded_and_played = false;     // checks whether loadAndPlayCurrentFile function has been called
-    private boolean track_finished = false;
     private ArrayList<File> audio_files;    // a folder
     private final KButton play_stop_button;
     private final KButton reset_button;
@@ -28,6 +25,9 @@ public class ControlPanel extends JPanel {
     private final KButton forward_track_by_five_seconds_button;
     private final KButton rewind_track_by_five_seconds_button;
     private final KButton loop_track_button;
+    private final JSlider clip_slider;
+
+
 
 
     // constructor of control panel
@@ -59,10 +59,17 @@ public class ControlPanel extends JPanel {
         loop_track_button.setForeground(Color.RED);
 
 
+        // Slider
+        clip_slider = new JSlider();
+        clip_slider.setMajorTickSpacing(1);
+        clip_slider.setMinorTickSpacing(1);
+        clip_slider.setOrientation(JSlider.HORIZONTAL);
+
+
         // Panel properties
         this.setBackground(Color.black);
         this.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-        this.setBounds(0, 0, 400, 37);
+        this.setBounds(0, 0, 220, 90);
 
 
         // button functionality
@@ -97,16 +104,18 @@ public class ControlPanel extends JPanel {
 
 
         // contents of the panel
-        this.add(rewind_track_by_five_seconds_button);
-        this.add(previous_track_button);
-        this.add(play_stop_button);
-        this.add(reset_button);
-        this.add(next_track_button);
-        this.add(forward_track_by_five_seconds_button);
-        this.add(select_folder_button);
-        this.add(loop_track_button);
+        this.add(clip_slider, BorderLayout.NORTH);
+        this.add(rewind_track_by_five_seconds_button, BorderLayout.SOUTH);
+        this.add(previous_track_button, BorderLayout.SOUTH);
+        this.add(play_stop_button, BorderLayout.SOUTH);
+        this.add(reset_button, BorderLayout.SOUTH);
+        this.add(next_track_button, BorderLayout.SOUTH);
+        this.add(forward_track_by_five_seconds_button, BorderLayout.SOUTH);
+        this.add(select_folder_button, BorderLayout.SOUTH);
+        this.add(loop_track_button, BorderLayout.SOUTH);
 
-        updateButtonStates();
+
+        updateContentStates();
         select_folder_button.setEnabled(true);
     }
 
@@ -114,7 +123,7 @@ public class ControlPanel extends JPanel {
 
 
     // a function which updates turns the buttons on and off
-    private void updateButtonStates(){
+    private void updateContentStates(){
         forward_track_by_five_seconds_button.setEnabled(can_be_used);
         play_stop_button.setEnabled(can_be_used);
         reset_button.setEnabled(can_be_used);
@@ -123,7 +132,11 @@ public class ControlPanel extends JPanel {
         rewind_track_by_five_seconds_button.setEnabled(can_be_used);
         select_folder_button.setEnabled(false);
         loop_track_button.setEnabled(can_be_used);
+        clip_slider.setEnabled(can_be_used);
 
+        if(was_file_loaded_and_played) {
+            can_be_used = true;
+        }
     }
 
 
@@ -156,37 +169,16 @@ public class ControlPanel extends JPanel {
         clip = AudioSystem.getClip();
         clip.open(ais);
 
-
-        // When the clip reaches the end naturally, set trackFinished to true
-        clip.addLineListener(event -> {
-            if (event.getType() == LineEvent.Type.STOP && clip.getFramePosition() >= clip.getFrameLength()) {
-                track_finished = true; // Track finished naturally
-            }
-        });
-
-
-        //
         clip.addLineListener(event -> {
             if (event.getType() == LineEvent.Type.STOP) {
-                // Check if the track finished naturally
-                if (track_finished) {
-                    if (is_looping && was_file_loaded_and_played) {
-                        clip.setFramePosition(0); // Restart the track from the beginning
-                        clip.start(); // Start the clip again
-                    }
-
-                    else {
-                        nextTrack(); // Move to the next track
-                    }
+                if(is_looping && was_file_loaded_and_played) {
+                    clip.setFramePosition(0);  // Restart the track from the beginning
+                    clip.start();  // Start the clip again
                 }
 
-                else {
-                    track_finished = false;     // Reset the flag for manual stop (e.g., pause or stop button)
+                else{
+                    nextTrack();
                 }
-            }
-
-            else if (event.getType() == LineEvent.Type.START) {
-                track_finished = false;     // Reset the flag when a new track starts playing
             }
         });
 
@@ -218,7 +210,7 @@ public class ControlPanel extends JPanel {
             }
 
             can_be_used = true;
-            updateButtonStates();
+            updateContentStates();
         }
     }
 
@@ -269,7 +261,6 @@ public class ControlPanel extends JPanel {
     private void nextTrack() {
 
         try{
-
             clip.close();
             current_index++;
             loadAndPlayCurrentFile();
