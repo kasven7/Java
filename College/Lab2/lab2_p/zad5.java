@@ -1,25 +1,24 @@
-package lab2_p;
+package lab3_p;
 import java.util.Scanner;
 
 
 public class zad5 {
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int number;
+        Scanner in = new Scanner(System.in);
 
-        do {
-            System.out.println("Enter a natural number: ");
-            number = sc.nextInt();
+        System.out.println("Enter a natural number: ");
+        int number = in.nextInt();
 
-            if(number < 0){
-                System.out.println("You have to enter a positive number!");
-            }
-
-        }while(number < 0);
-
-        System.out.println("Here are all power 3 values that are less than the given number");
-        for(int i = 3; i < number; i *= 3){
-            System.out.print(i + ", ");
+        if(number < 0){
+            System.out.println("You cannot enter negative numbers!");
         }
+
+        else{
+            System.out.println("Here are all the powers of three less than the given number: ");
+            for(int i = 1; i < number; i *= 3){
+                System.out.print(i + "  ");
+            }
+        }
+        in.close();
     }
 }

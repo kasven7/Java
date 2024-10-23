@@ -1,41 +1,37 @@
-package lab2_p;
+package lab3_p;
 import java.util.Random;
 import java.util.Scanner;
 
 
 public class zad3 {
     public static void main(String[] args) {
-        Scanner input = new Scanner(System.in);
-        Random random = new Random();
-        int enteredNumber;
-        int randomNumber = random.nextInt(5) + 1;
-
-        System.out.println("Welcome to Number Guessing Game!");
-
-        do {
-
-            System.out.println("Enter a natural number in 1 to 200 range: ");
-            enteredNumber = input.nextInt();
-
-        } while(enteredNumber < 1 || enteredNumber > 200);
+        Random rand = new Random();
+        Scanner in = new Scanner(System.in);
+        int randomNum = rand.nextInt(200) + 1;
+        System.out.println(randomNum);
+        boolean guessed = false;
 
 
-        System.out.println("Here is the number drawn: " + randomNumber);
-
-        if(enteredNumber == randomNumber) {
-            System.out.println("You guessed the number! Congratulations :)");
-
-        }
-
-        else if(enteredNumber > randomNumber) {
-            System.out.println("Your number is greater than the drawn number!");
-
-        }
-
-        else{
-            System.out.println("Your number is lesser than the drawn number!");
-        }
+        System.out.println("WELCOME TO NUMBER GUESSING GAME!");
+        System.out.println("Pick a natural number in 1 to 200 range: ");
+        do{
+            int number = in.nextInt();
 
 
+            if(number == randomNum) {
+                System.out.println("YOU'VE WON! CONGRATULATIONS! :)");
+                guessed = true;
+            }
+
+            else if(number > randomNum) {
+                System.out.println("You missed! Your number is greater than the number picked.");
+            }
+
+            else if(number < randomNum) {
+                System.out.println("You missed! Your number is less than the number picked.");
+            }
+
+        }while(!guessed);
+        in.close();
     }
 }

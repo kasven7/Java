@@ -1,19 +1,35 @@
-package lab2_p;
+package lab3_p;
 import java.util.Scanner;
 
 
 public class zad4 {
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int numbers;
-        int product = 1;
+        Scanner in = new Scanner(System.in);
+        double product = 1.0;
+        String input;
 
-        do{
-            System.out.println("Enter an integer: ");
-            numbers = sc.nextInt();
-            product *= numbers;
+        System.out.println("Enter a number (enter 'q' to quit): ");
 
-        } while(numbers != 5);
-        System.out.println("The product of entered numbers is equal to " + product);
+        while (true) {
+            input = in.nextLine();
+
+
+            if (input.equalsIgnoreCase("q")) {
+                break;
+            }
+
+            try {
+                double number = Double.parseDouble(input);
+                product *= number;
+
+            } catch (NumberFormatException e) {
+                System.out.println("Incorrect input. Enter \"q\" to quit.");
+            }
+        }
+
+
+        System.out.println("The product of given numbers: " + product);
+        in.close();
     }
 }
+
