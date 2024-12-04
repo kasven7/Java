@@ -10,10 +10,16 @@ public class Ex2{
             Calculator calcFrFile = new Calculator(0);
 
 
-            String filePath = "calc.txt";
-            calc.writeToFile(filePath);
-            calcFrFile.readFromFile(filePath);
+            //csv file
+            String filePath1 = "C:\\Users\\kkowa\\Downloads\\calc1.csv";
+            calc.writeToFile(filePath1);
+            calcFrFile.readFromFile(filePath1);
 
+
+            // txt file
+            String filePath2 = "C:\\Users\\kkowa\\Downloads\\calc1.txt";
+            calc.writeToFile(filePath2);
+            calcFrFile.readFromFile(filePath2);
 
             System.out.println("Calculation: " + calcFrFile.calculate('*'));
 
