@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 
 public class Autokomis {
-    private final ArrayList<Samochod> komis = new ArrayList<>();
+    private ArrayList<Samochod> komis = new ArrayList<>();
 
 
     public Autokomis(){
