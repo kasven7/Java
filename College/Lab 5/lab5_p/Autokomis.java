@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 
 public class Autokomis {
-    static private final ArrayList<Samochod> komis = new ArrayList<>();
+    private final ArrayList<Samochod> komis = new ArrayList<>();
 
 
     public Autokomis(){
@@ -21,10 +21,19 @@ public class Autokomis {
 
     }
 
+    public void addVehicle(Samochod s){
+        komis.add(s);
+    }
+
+    public void removeVehicle(Samochod s){
+        komis.remove(s);
+    }
+
     public static void main(String[] args){
         Autokomis autokomis = new Autokomis();
 
-        for(Samochod pojazd : komis){
+
+        for(Samochod pojazd : autokomis.komis){
             System.out.println(pojazd);
         }
     }
