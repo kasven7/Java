@@ -8,7 +8,7 @@ public class Zad3 {
     public static void main(String[] args){
         String sentence = "Z podanego zdania należy wyodrębnić zawarte w nim słowa stosując wyrażenie regularne.";
         String regex = "\\b[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+\\b";
-        Pattern pattern = Pattern.compile(regex);
+        Pattern pattern = Pattern.compile(regex, Pattern.UNICODE_CHARACTER_CLASS);
         Matcher matcher = pattern.matcher(sentence);
         List<String> words = new ArrayList<>();
 
