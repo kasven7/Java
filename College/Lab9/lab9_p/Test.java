@@ -29,6 +29,7 @@ public class Test {
         si.setIndexNumber(inINumber);
         System.out.println();
 
+        in.close();
         System.out.println(si);
     }
 }
