@@ -10,12 +10,13 @@ public class MovieLogGenerator2 extends Thread {
         try (BufferedReader reader = new BufferedReader(new FileReader("movie_logs.txt"))) {
             String line;
             int lineCount = 0;
+
             while ((line = reader.readLine()) != null) {
                 System.out.println(line);
                 lineCount++;
                 if (lineCount % 10 == 0) {
                     System.out.println("Press Enter to continue...");
-                    System.in.read(); // Wait for user input to continue
+                    System.in.read(); // wait for the user input
                 }
             }
         } catch (IOException e) {
