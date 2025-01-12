@@ -97,7 +97,15 @@ public class Calculator {
                     .map(Double::parseDouble) // Parse to double
                     .collect(Collectors.toList());
 
+        }catch (IOException e) {
+            System.err.println("Error reading file: " + e.getMessage());
+            e.printStackTrace();
+
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid number format in file: " + e.getMessage());
+            e.printStackTrace();
         }
+
         System.out.println("Numbers read from file: " + numbers);
     }
 
@@ -108,7 +116,11 @@ public class Calculator {
                     .collect(Collectors.joining(",")); // Join with commas
             writer.write(data);
 
+        }catch (IOException e) {
+            System.err.println("Error writing to file: " + e.getMessage());
+            e.printStackTrace();
         }
+
         System.out.println("Numbers written to file: " + filePath);
     }
 }
