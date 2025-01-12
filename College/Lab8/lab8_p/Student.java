@@ -25,7 +25,6 @@ public class Student {
 
 
     public static void main(String[] args){
-        int studentCount = 0;
         List<Student> students = new ArrayList<>();
         Student s1 = new Student("Kacper", "Kowalski", 11990);
         Student s2 = new Student("Bartek", "Urban", 10055);
