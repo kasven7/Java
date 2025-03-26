@@ -1,4 +1,4 @@
-package list2_1;
+package list2_1_p;
 
 public class Space2D {
     private double x;

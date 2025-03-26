@@ -5,7 +5,6 @@ import java.util.Scanner;
 public class ex3 {
     static int largestIndex = -1;
 
-
     public static double countMean(int[] tab){
         int sum = 0;
 
@@ -95,7 +94,7 @@ public class ex3 {
             for(int j = 0; j < tab.length; j++){
                 boolean isAlreadyUsed = false;
 
-                for(int k = 0; k < 2; k++){
+                for(int k = 0; k < indexes.length; k++){
                     if(indexes[k] == j){
                         isAlreadyUsed = true;
                         break;

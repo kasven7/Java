@@ -1,4 +1,4 @@
-package list2_2;
+package list2_2_p;
 
 
 public class Test {

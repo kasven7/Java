@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 public class ex1 {
 
-    public static boolean drawATree(int height){
+    public static void drawATree(int height){
         for(int i = 0; i < height; i++){
 
             for(int k = height - i - 1; k >= 0; k--){
@@ -27,17 +27,17 @@ public class ex1 {
                 }
             }
         }
-
-        return true;
     }
 
 
     public static void main(String[] args){
         Scanner in = new Scanner(System.in);
 
+        System.out.println("Hello world!");
+
         System.out.print("Enter the height of your arrow: ");
         int height = in.nextInt();
 
-        boolean isTreeDrawn = drawATree(height);
+        drawATree(height);
     }
 }
