@@ -1,4 +1,4 @@
-package lab3_1;
+package list3_1;
 
 
 public class TestWatkow {

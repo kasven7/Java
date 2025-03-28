@@ -1,4 +1,4 @@
-package lab3_2;
+package list3_2;
 
 
 public class Test {
