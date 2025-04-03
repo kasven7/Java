@@ -11,7 +11,6 @@ public class MinMaxTest {
         MinMaxThread[] minMaxThreads = new MinMaxThread[8];
         int[] tab = new int[N];
         int range = N / minMaxThreads.length;
-        long startPoint = System.nanoTime();    // we measure the point in time from which the min max search starts
         int globalMinValue = Integer.MAX_VALUE;
         int globalMaxValue = Integer.MIN_VALUE;
 
@@ -21,7 +20,6 @@ public class MinMaxTest {
             tab[i] = rand.nextInt(100);
         }
 
-
         // declaring our threads and correctly separating the tasks for these threads to handle and also finding local min and max values
         for(int i = 0; i < minMaxThreads.length; i++){
             int startPos = i * range;   // we count the start position in thread work range
@@ -29,6 +27,7 @@ public class MinMaxTest {
             minMaxThreads[i].start();
         }
 
+        long startPoint = System.nanoTime();    // we measure the point in time from which the min max search starts
 
         // searching for global min and max Values in our tab of random numbers
         for (MinMaxThread minMaxThread : minMaxThreads) {
@@ -51,10 +50,10 @@ public class MinMaxTest {
 
 /*
 1. Czy czas działania programu zmienia się w zależności od liczby wątków?
-Tak, czas działania programu będzie się zmieniał w zależności od liczby wątków.
-Przy większej liczbie wątków obliczenia mogą być wykonywane równolegle, co przyspiesza działanie programu.
-Jednak po przekroczeniu liczby rdzeni procesora dodatkowe wątki mogą wprowadzać narzut związany z przełączaniem kontekstu,
-co może powodować spowolnienie zamiast przyspieszenia.
+Tak, czas działania programu zmienia się w zależności od liczby wątków.
+Przy większej liczbie wątków olbiczenia mogą być wykonywane równolegle, co przyspiesza działanie programu.
+Jednak po przekroczeniu liczby rdzeni procesora istnieje ryzyko, że dodatkowe wątki wprowadzą narzut związany
+z przełączaniem kontekstu, co może powodować spowolnienie zamiast przyspieszenia.
 
 2.Jaki jest czas działania programu dla 1, 2, 4, 6 i 8 wątków?
 Dla 1 wątku: 1085274800ns
@@ -73,4 +72,10 @@ Przy 2, 4, 6, 8 wątkach – program powinien działać szybciej, ale tylko do m
 Po przekroczeniu 8 wątków, zysk wydajności może być mniejszy, ponieważ wątki zaczynają współdzielić rdzenie (SMT).
 
 Wartością graniczną dla optymalnej wydajności jest 8 wątków, ponieważ odpowiada liczbie rdzeni.
+
+
+Specyfikacja sprzętu:
+    a) procesor: AMD Ryzen 7 5800K 8-rdzeniowy,
+    b) system operacyjny: Windows 11 Pro,
+    c) rozmiar pamięci RAM: 32GB
 */
