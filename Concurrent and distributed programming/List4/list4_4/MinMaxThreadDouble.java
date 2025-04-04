@@ -1,15 +1,15 @@
-package List4.list4_3;
+package List4.list4_4;
 
 
-public class MinMaxThread extends Thread{
-    private int[] tab;
-    private int minValue = Integer.MAX_VALUE;
-    private int maxValue = Integer.MIN_VALUE;
+public class MinMaxThreadDouble extends Thread{
+    private double[] tab;
+    private double minValue = Double.MAX_VALUE;
+    private double maxValue = Double.MIN_VALUE;
     private int startPos;   // starting position of the thread in the table
     private int endPos; // end position of the thread in the table
 
 
-    public MinMaxThread(int[] tab, int startPos, int endPos){
+    public MinMaxThreadDouble(double[] tab, int startPos, int endPos){
         this.tab = tab;
         this.startPos = startPos;
         this.endPos = endPos;
@@ -24,6 +24,6 @@ public class MinMaxThread extends Thread{
         }
     }
 
-    public int getMinValue() { return minValue; }
-    public int getMaxValue(){ return maxValue; }
+    public double getMinValue() { return minValue; }
+    public double getMaxValue(){ return maxValue; }
 }

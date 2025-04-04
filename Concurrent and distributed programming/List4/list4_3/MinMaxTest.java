@@ -4,12 +4,14 @@ import java.util.Random;
 
 public class MinMaxTest {
     public static final int N = 320000000;    // the size of our table of random values
+    public static final int W = 8;
 
 
     public static void main(String[] args){
         Random rand = new Random();
-        MinMaxThread[] minMaxThreads = new MinMaxThread[8];
+        MinMaxThread[] minMaxThreads = new MinMaxThread[W];
         int[] tab = new int[N];
+        // double[] tab2 = new tab[N];
         int range = N / minMaxThreads.length;
         int globalMinValue = Integer.MAX_VALUE;
         int globalMaxValue = Integer.MIN_VALUE;
@@ -20,14 +22,14 @@ public class MinMaxTest {
             tab[i] = rand.nextInt(100);
         }
 
+        long startPoint = System.nanoTime();    // we measure the point in time from which the min max search starts
+
         // declaring our threads and correctly separating the tasks for these threads to handle and also finding local min and max values
         for(int i = 0; i < minMaxThreads.length; i++){
             int startPos = i * range;   // we count the start position in thread work range
             minMaxThreads[i] = new MinMaxThread(tab, startPos, (i == minMaxThreads.length - 1) ? N : startPos + range);   // Here we pass the end position and we count it also
             minMaxThreads[i].start();
         }
-
-        long startPoint = System.nanoTime();    // we measure the point in time from which the min max search starts
 
         // searching for global min and max Values in our tab of random numbers
         for (MinMaxThread minMaxThread : minMaxThreads) {
@@ -56,11 +58,11 @@ Jednak po przekroczeniu liczby rdzeni procesora istnieje ryzyko, że dodatkowe w
 z przełączaniem kontekstu, co może powodować spowolnienie zamiast przyspieszenia.
 
 2.Jaki jest czas działania programu dla 1, 2, 4, 6 i 8 wątków?
-Dla 1 wątku: 1085274800ns
-Dla 2 wątków: 1041488500ns
-Dla 4 wątków: 1021866700ns
-Dla 6 wątków: 1027893900ns
-Dla 8 wątków: 1025320200ns
+Dla 1 wątku: 108358700ns
+Dla 2 wątków: 147326900ns
+Dla 4 wątków: 109882200ns
+Dla 6 wątków: 104327000ns
+Dla 8 wątków: 102307500ns
 
 Rozmiar tablicy z liczbami: 320000000
 
@@ -75,7 +77,7 @@ Wartością graniczną dla optymalnej wydajności jest 8 wątków, ponieważ odp
 
 
 Specyfikacja sprzętu:
-    a) procesor: AMD Ryzen 7 5800K 8-rdzeniowy,
-    b) system operacyjny: Windows 11 Pro,
-    c) rozmiar pamięci RAM: 32GB
+    a) procesor: 12th Gen Intel(R) Core(TM) i5-12500H   2.50 GHz, 8-rdzeniowy,
+    b) system operacyjny: Windows 11 Home,
+    c) rozmiar pamięci RAM: 16GB
 */
