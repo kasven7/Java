@@ -4,10 +4,11 @@ import java.util.concurrent.Semaphore;
 
 public class Main {
     public static void main(String[] args){
-        Semaphore sem = new Semaphore(0);
-        Data data = new Data(sem);
-        Delta delta = new Delta(data, sem);
-        Roots roots = new Roots(data, delta, sem);
+        Semaphore semDD = new Semaphore(0);
+        Semaphore semDR = new Semaphore(0);
+        Data data = new Data(semDD);
+        Delta delta = new Delta(data, semDD, semDR);
+        Roots roots = new Roots(data, delta, semDR);
 
         data.start();
         delta.start();

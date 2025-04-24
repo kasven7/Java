@@ -5,17 +5,17 @@ import java.util.concurrent.Semaphore;
 
 public class Data2 extends Thread{
     private int b;
+    private Semaphore semD;
+    private Semaphore semDC;
 
-    private Semaphore sem;
-
-    Data2(Semaphore sem){
-        this.sem = sem;
+    Data2(Semaphore semD, Semaphore semDC){
+        this.semD = semD; this.semDC = semDC;
     }
 
     @Override
     public void run(){
         try {
-            sem.acquire();
+            semD.acquire();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -26,7 +26,7 @@ public class Data2 extends Thread{
         b = in.nextInt();
 
         System.out.println("Thread Data2 ends its work");
-        sem.release();
+        semDC.release();
     }
 
     public int getB(){return b;}

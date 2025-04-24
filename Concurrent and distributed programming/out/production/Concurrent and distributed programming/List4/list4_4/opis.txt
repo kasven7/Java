@@ -1,0 +1,13 @@
+Jaka jest zależność czasu działania programu i liczby rdzeni procesora w komputerze?
+Przy 1 wątku program działa sekwencyjnie – brak przyspieszenia.
+
+Przy 2, 4, 6, 8 wątkach – program powinien działać szybciej, ale tylko do momentu osiągnięcia liczby rdzeni fizycznych.
+
+Po przekroczeniu 8 wątków, zysk wydajności może być mniejszy, ponieważ wątki zaczynają współdzielić rdzenie (SMT).
+
+Wartością graniczną dla optymalnej wydajności jest 8 wątków, ponieważ odpowiada liczbie rdzeni.
+
+Specyfikacja sprzętu:
+    a) procesor: 12th Gen Intel(R) Core(TM) i5-12500H   2.50 GHz, 8-rdzeniowy,
+    b) system operacyjny: Windows 11 Home,
+    c) rozmiar pamięci RAM: 16GB
