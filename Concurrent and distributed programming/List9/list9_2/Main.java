@@ -6,8 +6,6 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 
 public class Main {
@@ -30,8 +28,9 @@ public class Main {
         fill_matrix_A(A);
         fill_matrix_B(B);
 
-        System.out.println("\nProcessing matrix size: " + SIZE + "x" + SIZE);
+        System.out.println("\nMatrix size: " + SIZE + "x" + SIZE);
         System.out.println("Number of available processors: " + processors);
+
 
         // Single thread
         Multiply multiply = new Multiply(A, B, SIZE);
@@ -47,6 +46,7 @@ public class Main {
         C = multiply.getResult();
 
         System.out.println("Single thread time: " + String.format("%.2f", singleThreadT) + "s");
+
 
         // Multi-thread
         Multiply4[] multipliers = new Multiply4[processors];
@@ -79,18 +79,24 @@ public class Main {
 
         System.out.println("Multi-thread (" + processors + ") time: " +
                 String.format("%.2f", multiThreadT) + "s");
-        System.out.println("Speedup: " +
+        System.out.println("Speedup (how much multi thread was faster): " +
                 String.format("%.2f", singleThreadT / multiThreadT) + "x");
+
 
         // Verification
         boolean resultsMatch = verifyResults(C, D);
         System.out.println("Results verification: " + (resultsMatch ? "MATCH" : "DIFFER"));
 
+
         // Calculate MD5 checksums
         String md5Single = calculateMD5(C);
         String md5Multi = calculateMD5(D);
-        System.out.println("MD5 checksum (single-thread): " + md5Single);
-        System.out.println("MD5 checksum (multi-thread): " + md5Multi);
+        int j = 1;
+
+        System.out.println("MD5 checksum (single-thread): C" + j + " = " + md5Single);
+        System.out.println("MD5 checksum (multi-thread): D" + j + " = " + md5Multi);
+        j++;
+
 
         // Save results to file
         saveResultsToFile(SIZE, processors, singleThreadT, multiThreadT,
@@ -129,15 +135,13 @@ public class Main {
                                           boolean resultsMatch, String md5Single, String md5Multi) {
         try (PrintWriter writer = new PrintWriter(new FileWriter("wyniki.txt", true))) {
             writer.println("\n--- Results ---");
-            writer.println("Timestamp: " + LocalDateTime.now().format(
-                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
             writer.println("Matrix size: " + size + "x" + size);
             writer.println("Number of processors: " + processors);
             writer.println("Single thread time: " +
                     String.format("%.2f", singleThreadTime) + "s");
             writer.println("Multi-thread time: " +
                     String.format("%.2f", multiThreadTime) + "s");
-            writer.println("Speedup: " +
+            writer.println("Speedup (how much multi thread was faster): " +
                     String.format("%.2f", singleThreadTime / multiThreadTime) + "x");
             writer.println("Results verification: " +
                     (resultsMatch ? "MATCH" : "DIFFER"));

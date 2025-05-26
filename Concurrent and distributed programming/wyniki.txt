@@ -1,0 +1,33 @@
+
+--- Results ---
+Matrix size: 500x500
+Number of processors: 16
+Single thread time: 0,13s
+Multi-thread time: 0,05s
+Speedup (how much multi thread was faster): 2,87x
+Results verification: MATCH
+MD5 checksum (single-thread): 58c67d17a4fe9e0736c25e0fee359a08
+MD5 checksum (multi-thread): 58c67d17a4fe9e0736c25e0fee359a08
+--- End of results ---
+
+--- Results ---
+Matrix size: 1000x1000
+Number of processors: 16
+Single thread time: 1,15s
+Multi-thread time: 0,23s
+Speedup (how much multi thread was faster): 5,00x
+Results verification: MATCH
+MD5 checksum (single-thread): 6b337c47aa66c5cf049df3ade3fa7616
+MD5 checksum (multi-thread): 6b337c47aa66c5cf049df3ade3fa7616
+--- End of results ---
+
+--- Results ---
+Matrix size: 1500x1500
+Number of processors: 16
+Single thread time: 3,17s
+Multi-thread time: 0,62s
+Speedup (how much multi thread was faster): 5,11x
+Results verification: MATCH
+MD5 checksum (single-thread): 88c8d272c7c70e8c64f2e3677370b802
+MD5 checksum (multi-thread): 88c8d272c7c70e8c64f2e3677370b802
+--- End of results ---
