@@ -12,11 +12,10 @@ public class Bank extends Thread{
     public void run() {
         try {
             while (true) {
-                Thread.sleep(1000); // Check balance every second
+                Thread.sleep(1000);
                 int balance = atm.calculateBalance();
                 System.out.printf("ATM balance: %d PLN%n", balance);
 
-                // Check if refill is needed
                 if (balance < 3000) {
                     System.out.println("Bank: starting ATM refill");
                     atm.startRefill();

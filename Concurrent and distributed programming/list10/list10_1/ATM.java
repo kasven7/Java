@@ -28,7 +28,6 @@ public class ATM {
     private Integer currentCustomer = null;
 
     public ATM() {
-        // Initialize with 20 of each banknote
         for (Banknote note : Banknote.values()) {
             banknotes.put(note, 20);
         }
@@ -43,10 +42,9 @@ public class ATM {
     public Map<Banknote, Integer> withdraw(int amount, int customerId) throws InterruptedException {
         lock.lock();
         try {
-            // Wait if ATM is being refilled or another customer is withdrawing
             while (refillInProgress || (currentCustomer != null && currentCustomer != customerId)) {
                 if (currentCustomer != null && currentCustomer == customerId) {
-                    break; // Current customer can continue
+                    break;
                 }
                 customerCondition.await();
             }
@@ -54,17 +52,15 @@ public class ATM {
             currentCustomer = customerId;
 
             if (refillInProgress) {
-                return null; // ATM is being refilled
+                return null;
             }
 
-            // Check if we have enough funds
             if (amount > calculateBalance()) {
                 currentCustomer = null;
                 customerCondition.signalAll();
                 return null;
             }
 
-            // Try to withdraw the amount
             Map<Banknote, Integer> withdrawal = new EnumMap<>(Banknote.class);
             int remaining = amount;
 
@@ -84,13 +80,11 @@ public class ATM {
             }
 
             if (remaining == 0) {
-                // Confirm withdrawal
                 withdrawal.forEach((note, count) -> banknotes.put(note, banknotes.get(note) - count));
                 currentCustomer = null;
                 customerCondition.signalAll();
                 return withdrawal;
             } else {
-                // Cannot withdraw exact amount
                 currentCustomer = null;
                 customerCondition.signalAll();
                 return null;
@@ -105,12 +99,10 @@ public class ATM {
         try {
             refillInProgress = true;
 
-            // Wait for current customer to finish
             while (currentCustomer != null) {
                 refillCondition.await();
             }
 
-            // Refill ATM
             for (Banknote note : Banknote.values()) {
                 banknotes.put(note, 20);
             }
